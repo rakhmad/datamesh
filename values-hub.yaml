@@ -8,6 +8,7 @@ clusterGroup:
     - golang-external-secrets
     - config-demo
     - hello-world
+    - ipa
 
   subscriptions:
     acm:
@@ -56,6 +57,26 @@ clusterGroup:
       namespace: hello-world
       project: hello-world
       path: charts/all/hello-world
+
+    ipa:
+      name: ipa
+      namespace: ipa
+      project: hub
+      repoURL: https://redhat-cop.github.io/helm-charts
+      chart: ipa
+      overrides:
+        - name: ocp_auth.enabled
+          value: "true"
+        - name: ocp_auth.bind_dn
+          value: "uid=ldap_admin\\,cn=users\\,cn=accounts\\,dc=redhatlabs\\,dc=dev"
+        - name: ocp_auth.bind_password
+          value: "r3dh4t1"
+        - name: ocp_auth.admin_password
+          value: "sup3r4dm1n"
+        - name: app_domain
+          value: "cluster-fqswg.fqswg.sandbox982.opentlc.com"
+
+
 
   imperative:
     # NOTE: We *must* use lists and not hashes. As hashes lose ordering once parsed by helm
